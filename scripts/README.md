@@ -1,4 +1,4 @@
-Motif Enrichment Pipeline – Manual
+Motif Enrichment – Manual
 ==================================
 
 Overview
@@ -7,20 +7,20 @@ This tool calculates enrichment of nucleotide motifs (e.g. UA, CG, UACG)
 in RNA/DNA sequences.  
 It supports two main modes:
 
-1. Internal expectation (within peaks):
-   Compares observed motif counts in peaks vs. expected counts based on
+1. Internal expectation:
+   Compares observed motif counts in sequences vs. expected counts based on
    their own nucleotide composition (or shuffled versions).
    → Answers: “Are my peaks enriched for this motif compared to
    randomised versions of the same peaks?”
 
-2. Background comparison (peaks vs mRNAs):
-   Compares motif frequencies in peaks vs. frequencies in a background set
+2. Background comparison:
+   Compares motif frequencies in sequences vs. frequencies in a background sequence set
    (e.g. random mRNA windows).
-   → Answers: “Are my peaks enriched for this motif compared to normal mRNA?”
+   → Answers: “Are my sequences enriched for this motif compared to normal sequences?”
 
 Input
 -----
---peaks       FASTA file with your peak sequences
+--peaks       FASTA file with your sequences
 --background  FASTA file with background sequences (only for background mode)
 --motifs      Comma-separated motifs (default: UA,CG,UACG)
 --alphabet    RNA (default; converts T→U) or DNA
@@ -38,7 +38,7 @@ Internal Expectation Mode
 -------------------------
 
 1. Mononucleotide model (--internal-model mono)
-   - Observed (O): motif counts in peaks
+   - Observed (O): motif counts in sequences
    - Expected (E):
        f(A) = #A / total bases, same for U,C,G
        P(motif) = product of base frequencies
@@ -74,16 +74,16 @@ Example Commands
 python3 motif_enrichment.py --peaks peaks.fa --mode internal --internal-model mono
 
 # Internal O/E with mono+di model for tetranucleotides
-python3 motif_enrichment.py --peaks peaks.fa --mode internal --internal-model mono+di4
+python3 motif_enrichment.py --peaks sequences.fa --mode internal --internal-model mono+di4
 
 # Internal O/E with empirical shuffle (mono-preserving, 500 shuffles)
-python3 motif_enrichment.py --peaks peaks.fa --mode internal --internal-model empirical1 --shuffles 500
+python3 motif_enrichment.py --peaks sequences.fa --mode internal --internal-model empirical1 --shuffles 500
 
 # Peaks vs background (RNA alphabet)
 python3 motif_enrichment.py --peaks peaks.fa --background background.fa --mode background --alphabet RNA
 
 Practical Notes
 ---------------
-- Match background sequence lengths and context to peaks
+- Match background sequence lengths and context to analysed sequences
 - Script outputs counts/frequencies; apply stats tests separately if needed
 - Use --alphabet DNA if sequences contain T
